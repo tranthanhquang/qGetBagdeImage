@@ -9,18 +9,51 @@
 
 	require_once 'lib/PHPExcel/Classes/PHPExcel.php';
 
-	$baseqURL = "<URL>"; // URL
-	$baseqExt = ".jpg";
-	$qfolder = "images/";
+	const qfolder = "images/";
+	const qidentity_url_name = "qurl:";
+	const qidentity_data_name = "qexcelname:";
+	const qarray_resource_file = array("qresource_data.qfile");
+	const qbase_ext = ".jpg";
+	$qbase_url = readResourceFile(qarray_resource_file, 0);
 
-	if(!is_dir($qfolder)) {
+	function readResourceFile($resource_file_list, $content_id) {
+		if (sizeof($resource_file_list) > 1) {
+			foreach ($resource_file_list as &$file_name) { 
+			    // Create new SplFile Object 
+			    $file = new SplFileObject($file_name, "r");
+			    $qpost_url = strpos($file, qidentity_url_name);
+				$qpost_data = strpos($file, qidentity_data_name);
+				if ($content_id == 0 && $qpost_url !== false) {
+					return trim(substr($file, strlen(qidentity_url_name)));
+				}
+
+				if ($content_id == 1 && $qpost_data !== false) {
+					return qdata_folder.trim(substr($file, strlen(qidentity_data_name)));
+				}
+			}
+		} else {
+			foreach (new SplFileObject($resource_file_list[0]) as $line) {
+				$qpost_url = strpos($line, qidentity_url_name);
+				$qpost_data = strpos($line, qidentity_data_name);
+				if ($content_id == 0 && $qpost_url !== false) {
+					return trim(substr($line, strlen(qidentity_url_name)));
+				}
+
+				if ($content_id == 1 && $qpost_data !== false) {
+					return qdata_folder.trim(substr($line, strlen(qidentity_data_name)));
+				}
+			}
+		}
+	}
+
+	if(!is_dir(qfolder)) {
 	    $output=null;
 		$retval=null;
-		exec("mkdir ".$qfolder, $output, $retval);
+		exec("mkdir ".qfolder, $output, $retval);
 	}
 
 	function getDataFromExcelFile() {
-		$file = "data/data.xlsx";
+		$file = readResourceFile(qarray_resource_file, 1);
 		$data = [];
 
 		$objFile = PHPExcel_IOFactory::identify($file);
@@ -66,8 +99,8 @@
 	$memberList = getDataFromExcelFile();
 	// $memberListRealID = getDataFromExcelFile();
 	foreach ($memberList as $value) {
-		$qParams = $value.$baseqExt;
-		// $qImageName = $memberListRealID[$i].$baseqExt;
-		dfCurl($baseqURL.$qParams, "{$qParams}", $qfolder);
+		$qParams = $value.qbase_ext;
+		// $qImageName = $memberListRealID[$i].qbase_ext;
+		dfCurl($qbase_url.$qParams, "{$qParams}", qfolder);
 	}
 ?>

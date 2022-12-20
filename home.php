@@ -11,6 +11,7 @@
 
 	const qfolder = "qimages/";
 	const qbase_ext = ".jpg";
+	const qdata_folder = "data/";
 	const qidentity_url_name = "qurl:";
 	const qidentity_data_name = "qexcelname:";
 	const qarray_resource_file = array("qresource_data.qfile");
@@ -136,7 +137,7 @@
 	$qmembers = qgetDataFromExcelFileDetails();
 	// $memberListRealID = qgetDataFromExcelFile();
 	foreach ($qmembers as $value) {
-		$qparrams = $qbase_ext;
+		$qparrams = $value.qbase_ext;
 		// $q_image_name = $memberListRealID[$i].qbase_ext;
 
 		// Processing Download Images List

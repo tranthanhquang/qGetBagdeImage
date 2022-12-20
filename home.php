@@ -14,7 +14,7 @@
 	const qdata_folder = "data/";
 	const qidentity_url_name = "qurl:";
 	const qidentity_data_name = "qexcelname:";
-	const qarray_resource_file = array("qresource_data.qfile");
+	const qarray_resource_file = array("qresource_data.txt");
 	// Constant number sheet data
 	define ('qcolumn_user_No', 0);
 	define ('qcolumn_user_ID', 1);
